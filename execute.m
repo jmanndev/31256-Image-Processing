@@ -7,7 +7,7 @@ run('readFiles.m');
 fixed = images{1};
 figure;
 processedImages = {length(images)};
-processedImages{1} = fixed;
+processedImages{1} = rgb2gray(fixed);
 
 for ii=2:length(images)
     % show initial difference before processing
