@@ -22,8 +22,8 @@ fixedRefObj = imref2d(size(FIXED));
 movingRefObj = imref2d(size(MOVING));
 
 % Detect corners using Harris-Stephens algorithm
-fixedPoints = detectHarrisFeatures(FIXED,'FilterSize',7,'MinQuality',0.315972);
-movingPoints = detectHarrisFeatures(MOVING,'FilterSize',7,'MinQuality',0.315972);
+fixedPoints = detectHarrisFeatures(FIXED,'FilterSize',7,'MinQuality',0.1);
+movingPoints = detectHarrisFeatures(MOVING,'FilterSize',7,'MinQuality',0.1);
 
 % Extract features
 [fixedFeatures,fixedValidPoints] = extractFeatures(FIXED,fixedPoints,'Upright',true);
