@@ -30,14 +30,14 @@ movingPoints = detectSURFFeatures(MOVING,'MetricThreshold',750.000000,'NumOctave
 [movingFeatures,movingValidPoints] = extractFeatures(MOVING,movingPoints,'Upright',false);
 
 % Match features
-indexPairs = matchFeatures(fixedFeatures,movingFeatures,'MatchThreshold',77.430556,'MaxRatio',0.774306);
+indexPairs = matchFeatures(fixedFeatures,movingFeatures,'MatchThreshold',50.000000,'MaxRatio',0.500000);
 fixedMatchedPoints = fixedValidPoints(indexPairs(:,1));
 movingMatchedPoints = movingValidPoints(indexPairs(:,2));
 MOVINGREG.FixedMatchedFeatures = fixedMatchedPoints;
 MOVINGREG.MovingMatchedFeatures = movingMatchedPoints;
 
 % Apply transformation - Results may not be identical between runs because of the randomized nature of the algorithm
-tform = estimateGeometricTransform(movingMatchedPoints,fixedMatchedPoints,'projective');
+tform = estimateGeometricTransform(movingMatchedPoints,fixedMatchedPoints,'similarity');
 MOVINGREG.Transformation = tform;
 MOVINGREG.RegisteredImage = imwarp(MOVING, movingRefObj, tform, 'OutputView', fixedRefObj, 'SmoothEdges', true);
 
