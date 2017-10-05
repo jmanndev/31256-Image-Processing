@@ -2,7 +2,7 @@
 % The images are sorted into patient folders, the currently available 
 % ones are T0004, 6, 7 & 179. Change the currentPatient to change patient
 
-currentPatient = 'T0179';
+currentPatient = 'T0004';
 
 % DONT FORGET TO ADD ALL SUBFOLDERS TO MATLAB PWD
 
