@@ -4,13 +4,13 @@
 %
 % The final score can be used as an evaluation metric for the alignment
 
-function [AVGERROR] = NaiveAccuracy(images, metric)
+function [AVGERROR] = evaluateTotalAccuracy(images, metric)
 
-fixed = images{1};
+fixed = removeBackground(images{1});
 totalerr = 0;
 
 for ii=2:length(images)
-    totalerr = totalerr + getError(fixed, images{ii}, metric);
+    totalerr = totalerr + getError(fixed, removeBackground(images{ii}), metric);
 end
 
 AVGERROR = totalerr / (length(images)-1);

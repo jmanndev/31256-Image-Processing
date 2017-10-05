@@ -1,4 +1,4 @@
-function [MOVINGREG] = HarrisFunction(MOVING,FIXED)
+function [MOVINGREG] = harrisFunctionOne(MOVING,FIXED)
 %registerImages  Register grayscale images using auto-generated code from Registration Estimator app.
 %  [MOVINGREG] = registerImages(MOVING,FIXED) Register grayscale images
 %  MOVING and FIXED using auto-generated code from the Registration

@@ -1,8 +1,10 @@
 % Run script, uses the readFiles and HarrisFunction to iterate over the
 % thermograms and show the resultant alignment of the images 
 
+% Should be the main entrypoint for the program which is run to 
+% do all processing and alignment of demo image set
 
-function [PROCESSEDIMAGES] = execute(functionName)
+function [PROCESSEDIMAGES] = main(functionName)
 run('readFiles.m');
 
 fixed = images{1};
@@ -34,9 +36,9 @@ end
 function [IMAGE] = callFunction(functionName, fixed, moving)
 
 if (strcmp(functionName,'Harris'))
-    IMAGE = HarrisFunction(moving, fixed);
+    IMAGE = harrisFunctionOne(moving, fixed);
 elseif (strcmp(functionName, 'SURF'))
-    IMAGE = SURFFunction(moving, fixed);
+    IMAGE = surfFunctionOne(moving, fixed);
 end 
 
 end
