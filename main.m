@@ -4,6 +4,8 @@
 % Should be the main entrypoint for the program which is run to 
 % do all processing and alignment of demo image set
 
+% DONT FORGET TO ADD ALL SUBFOLDERS TO MATLAB PWD
+
 function [PROCESSEDIMAGES] = main(functionName)
 run('readFiles.m');
 

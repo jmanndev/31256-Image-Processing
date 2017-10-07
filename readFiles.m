@@ -2,24 +2,38 @@
 % The images are sorted into patient folders, the currently available 
 % ones are T0004, 6, 7 & 179. Change the currentPatient to change patient
 
-currentPatient = 'T0004';
+% Pass in either 'all' or a patient id to define what to load
 
-% DONT FORGET TO ADD ALL SUBFOLDERS TO MATLAB PWD
+function [images] = readFiles(option)
 
-imagefiles = dir(['./Dynamic Thermographic Images/' currentPatient '/*.jpg']);      
-nfiles = length(imagefiles);  % Number of files found
-images = {nfiles};
-for ii=1:nfiles
-   currentfilename =  imagefiles(ii).name;
-   currentimage = imread(['./Dynamic Thermographic Images/' currentPatient '/' currentfilename]);
-   images{ii} = currentimage;
+patients = {'T0004', 'T0006', 'T0007', 'T0179'};
+
+if (strcmp(option, 'all')) 
+    load = patients;
+else 
+    load = {option};
+end
+
+images = {length(load)};
+
+for i=1:length(load)
+    imagefiles = dir(['./Dynamic Thermographic Images/' load{i} '/*.jpg']);      
+    nfiles = length(imagefiles);  % Number of files found
+    currentimages = {nfiles};
+    
+    for ii=1:nfiles
+        currentfilename =  imagefiles(ii).name;
+        currentimage = imread(['./Dynamic Thermographic Images/' load{i} '/' currentfilename]);
+        currentimages{ii} = currentimage;
+    end
+    
+    images{i} = currentimages;
 end
 
 % Pre-load some test sets for evaluation purposes
 % It is assumed that the first two images will have more in common 
 % than first and last. I.e the first set should have a better score.
-goodImageTestSet = { images{1}, images{2} };
-badImageTestSet = { images{1}, images{20} };
+% goodImageTestSet = { images{1}, images{2} };
+% badImageTestSet = { images{1}, images{20} };
 
-% clear files to avoid a cluttered workspace
-clearvars currentfilename currentimage ii imagefiles nfiles
+end
