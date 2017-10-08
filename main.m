@@ -6,8 +6,7 @@
 
 % DONT FORGET TO ADD ALL SUBFOLDERS TO MATLAB PWD
 
-function [PROCESSEDIMAGES] = main(functionName)
-run('readFiles.m');
+function [PROCESSEDIMAGES] = main(functionName, images)
 
 fixed = images{1};
 figure;
