@@ -14,7 +14,7 @@ function test = animate( images , times2play, fps)
     
     % Extract the images from the cell
     images = images{1};
-    
+    imshow(images{1});
     % Creates the frame array for the animation movie
     for i = 1:length(images)
         % Checks if the images is grayscale, if it is the image this converts 
