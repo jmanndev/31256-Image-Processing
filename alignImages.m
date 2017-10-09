@@ -17,6 +17,7 @@ function [ final_align_batch ] = alignImages(images)
             align_batch{image} = translate_on_box_center(images{cell}{image - 1}, images{cell}{image}, threshold);
         end
         
+        % Return the final batch of aligned images
         final_align_batch{cell} = align_batch;
     end
 
@@ -36,24 +37,22 @@ function new_img = translate_on_box_center(im1,im2,threshold)
     misc2 = get_misc_points(im2, threshold);
     
     % Eigen Corner Detection
-%     eigen1 = get_eigen_corners(im1);
-%     eigen2 = get_eigen_corners(im2);
+    % eigen1 = get_eigen_corners(im1);
+    % eigen2 = get_eigen_corners(im2);
     
-%     disp(length(corners1));
-%     disp(length(corners2));
+    % disp(length(corners1));
+    % disp(length(corners2));
     corner_diff = (corners1 - corners2);
     
     % Get x and y translation metrics
-    % Only use misc points if found or have 1:1 ratio
+    % Only use misc points if found or have 1:1 ratio, the points need to 
+    % correspond between images in order to be valuable for matching
     if (~isempty(misc1) && ~isempty(misc2) && length(misc1) == length(misc2))
         misc_diff = (cell2mat(misc1) - cell2mat(misc2));
-    
         x_translate = mean([corner_diff(1), misc_diff(1)]);
- 
         y_translate = mean([corner_diff(2), misc_diff(2)]);
     else
         x_translate = mean(corner_diff(1));
- 
         y_translate = mean(corner_diff(2));
     end
         
@@ -61,33 +60,35 @@ function new_img = translate_on_box_center(im1,im2,threshold)
     M = [1, 0, 0; 0, 1, 0; x_translate, y_translate, 1];
     transform_object = affine2d(M);
    
+    % Get the output image from the image warp function
     Rout = imref2d(size(im1));
     new_img = imwarp(makeGray(im2), transform_object, 'OutputView', Rout);
    
 end
 
 function corners = get_center_box_corners(img, ROI)
-    % Get the corners using harris features
-    
-    features = detectHarrisFeatures(makeGray(img), 'ROI', ROI);
+    % Get the corners using harris feature detection
+    features = detectHarrisFeatures(makeGray(img), 'ROI', ROI)
+    % Only select the 4 best corners, the square in the images gives this
+    % a very high success rate
     corners = features.selectStrongest(4).Location;
-    
-    %imshow(img); hold on;
-    %plot(corners.selectStrongest(4));
 end
 
 function eigen_corners = get_eigen_corners(img)
+    % Redundant corner detection function, left for potential testing and
+    % improvement
     ROI = [200, 150, 200, 330];
     points = detectMinEigenFeatures(img, 'ROI', ROI);
     eigen_corners = points.selectStrongest(4);
 end
 
 function keypoints = get_misc_points(image, threshold)
+    % Find keypoints that are located in certain areas of the image
+    % We are looking for the two areola and the square seen in sample imgs
 
     image = makeGray(image);
-    % 90 seems to give good enough results at T0004 images
     thresholdValue = threshold;
-    % Select dark objects
+    % Select dark objects,
     binaryImage = image < thresholdValue;
 
     cc = bwconncomp(binaryImage); 
@@ -106,8 +107,8 @@ function keypoints = get_misc_points(image, threshold)
         centroidPts = [centroidPts, stats(i).Centroid];
     end
     
-    keypoints = centroidPts;
-    
+    % Return centroids of the found regions
+    keypoints = centroidPts;  
 end
 
 function [grayImage] = makeGray(image)

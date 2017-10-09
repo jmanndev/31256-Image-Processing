@@ -18,7 +18,7 @@ total = 0;
 ROI = [200 150 200 330];
 
 % Loops and compares the shift from the features of one image to the next
-% one and adds that error up.
+% one and take the mean of all those errors.
 currentImageCorners = detectHarrisFeatures(inputImages{1}, 'ROI', ROI);
 for i=1:noImages-1
     nextCorners = detectHarrisFeatures(inputImages{i+1}, 'ROI', ROI);
@@ -42,7 +42,6 @@ function averageShift = calcShift(firstImageCorners, secondImageCorners)
         totalShift = totalShift + calcDistance(firstImageCorners(i,1), secondImageCorners(i,1), firstImageCorners(i,2), secondImageCorners(i,2));
     end
     
-    % Average the shift
     averageShift = totalShift / length(firstImageCorners);
 end
 

@@ -13,14 +13,14 @@ for level = 1:length(thresholdLevels)
     badDetects = 0; % Bad detections find less than or more than 3 blobs
     for i = 1:length(images)
         pts = getMaskingPoints(images{i}, thresholdLevels(level));
-        if (pts < 2 || pts > 3)
+        if (pts ~= 3)
             badDetects = badDetects + 1;
         end
     end
     badDetectionsPerLevel{level} = badDetects;
 end
+% Get the threshold with the least amount of bad detections
 [minEl, minInd] = min(cell2mat(badDetectionsPerLevel));
-
 thresholdLevel = thresholdLevels(minInd(1));
 
 end
@@ -29,6 +29,7 @@ end
 % threshold as the value to clear or set a pixel when converting to a
 % binary image.
 function noKeypoints = getMaskingPoints(image, threshold)
+
     % Convert into binary image
     image = makeGray(image);
     thresholdValue = threshold;
@@ -39,14 +40,12 @@ function noKeypoints = getMaskingPoints(image, threshold)
     stats = regionprops(cc, 'Area','Eccentricity'); 
     % Find the circular areaola in as blobs in the image, usually has areas
     % of < 150px
-    circleIndex = find([stats.Area] < 200 & [stats.Area] > 30 & [stats.Eccentricity] < 0.8); 
+    circleIndex = find([stats.Area] < 215 & [stats.Area] > 30 & [stats.Eccentricity] < 0.8); 
     % Find the square in the image, this usually has an area of
     % ~3000-4000px
     squareIndex = find([stats.Area] > 2800 & [stats.Area] < 4000 & [stats.Eccentricity] < 0.8);
-    
+    % Combine the indexes
     idx = [circleIndex, squareIndex];
-
-   
     noKeypoints = length(idx);
 end
 
