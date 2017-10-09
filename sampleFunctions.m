@@ -1,6 +1,10 @@
+%   A collection of demonstrations and samples for the presentation and
+%   proof of concepts.
+
 function sampleFunctions(images, code)
-    img1 = images{1,1}{1,19};
-    img2 = images{1,1}{1,20};
+%   Use final 2 images of dataset as these were usually the most distorted
+    img1 = images{1,1}{1,1};
+    img2 = images{1,1}{1,2};
     
     switch code
         case 'mask'
@@ -14,6 +18,7 @@ function sampleFunctions(images, code)
 end
 
 function masking_demo(img1)
+%   Demonstrate the masking by threshold feature of MatLab
     image = makeGray(img1);
     threshold = 90;
     img = image < threshold;
@@ -21,6 +26,7 @@ function masking_demo(img1)
 end
 
 function hcd_demo(img1)
+%   Demonstrate basic Harris Corner Detection used in the program
     img = img1;
     ROI = [200 150 200 330];
     features = detectHarrisFeatures(makeGray(img), 'ROI', ROI);
@@ -31,6 +37,8 @@ function hcd_demo(img1)
 end
 
 function corresponding_demo(img1, img2)
+%   Demonstrate how using corresponding points does not allow for easy
+%   transformation of the image without skewing.
     I1 = makeGray(img1);
     I2 = makeGray(img2);
     points1 = detectHarrisFeatures(I1);
@@ -41,29 +49,10 @@ function corresponding_demo(img1, img2)
     matchedPoints1 = vpts1(indexPairs(:, 1));
     matchedPoints2 = vpts2(indexPairs(:, 2));
     
-    [tform, inlierDistorted, inlierOriginal] = estimateGeometricTransform(matchedPoints1, matchedPoints2, 'similarity');
-    figure;
-    showMatchedFeatures(I1,I2, inlierOriginal, inlierDistorted);
-    title('Matching points (inliers only)');
-    legend('ptsOriginal','ptsDistorted');
-    
-    Tinv  = tform.invert.T;
-
-    ss = Tinv(2,1);
-    sc = Tinv(1,1);
-    scale_recovered = sqrt(ss*ss + sc*sc);
-    theta_recovered = atan2(ss,sc)*180/pi;
-    
+    [tform, ~, ~] = estimateGeometricTransform(matchedPoints2, matchedPoints1, 'similarity');
     outputView = imref2d(size(I1));
     recovered  = imwarp(I2,tform,'OutputView',outputView);
-    figure, imshowpair(I1,recovered,'montage');
-    showMatchedFeatures(I1,recovered, inlierOriginal, inlierDistorted);
-
-%       figure;
-%     ax = axes;
-%     showMatchedFeatures(I1,I2,matchedPoints1,matchedPoints2,'montage','Parent',ax);
-%     title(ax, 'Candidate HCD point matches');
-%     legend(ax, 'Matched points 1','Matched points 2');
+    figure, imshowpair(I1,recovered);
 end
 
 function [grayImage] = makeGray(image)
