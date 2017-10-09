@@ -1,6 +1,57 @@
-function sample_functions(images, 'code
+function sampleFunctions(images, code)
+    img1 = images{1,1}{1,1};
+    img2 = images{1,1}{1,2};
+    
+    switch code
+        case 'mask'
+            masking_demo(img1);
+        case 'hcd'
+            hcd_demo(img1);
+        case 'corresponding'
+            corresponding_demo(img1, img2);
+        otherwise
+    end
+end
 
-function masking_demo(images)
-    img = images{1};
+function masking_demo(img1)
+    image = makeGray(img1);
+    threshold = 90;
+    img = image < threshold;
     imshow(img);
+    histogram(image);
+end
+
+function hcd_demo(img1)
+    img = img1;
+    ROI = [200 150 200 330];
+    features = detectHarrisFeatures(makeGray(img), 'ROI', ROI);
+    corners = features.selectStrongest(4);
+    imshow(img);
+    hold on;
+    plot(corners);
+end
+
+function corresponding_demo(img1, img2)
+    I1 = makeGray(img1);
+    img2 = makeGray(img2);
+    points1 = detectHarrisFeatures(img1);
+    points2 = detectHarrisFeatures(img2);
+    [f1, vpts1] = extractFeatures(img1, points1);
+    [f2, vpts2] = extractFeatures(img2, points2);
+    indexPairs = matchFeatures(f1, f2) ;
+    matchedPoints1 = vpts1(indexPairs(1:20, 1));
+    matchedPoints2 = vpts2(indexPairs(1:20, 2));
+    figure; ax = axes;
+    showMatchedFeatures(img1,img2,matchedPoints1,matchedPoints2,'montage','Parent',ax);
+    title(ax, 'Candidate point matches');
+    legend(ax, 'Matched points 1','Matched points 2');
+end
+
+function [grayImage] = makeGray(image)
+% Helper Function, 
+% If the image is not grayscale convert it
+    grayImage = image;
+    if (size(image, 3) == 3) 
+        grayImage = rgb2gray(image);
+    end
 end
