@@ -9,7 +9,7 @@ function [ final_align_batch ] = alignImages(images)
     for cell =  1:length(images)
         noImages = length(cell);
         align_batch = {noImages};
-        align_batch{1} = images{cell}{1};
+        align_batch{1} = makeGray(images{cell}{1});
         
         % For each image in the 'cell' call the alignment function
         for image = 2:length(images{cell})

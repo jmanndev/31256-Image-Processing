@@ -26,8 +26,6 @@ error = error / initalMetric;
 end
 
 function averageShift = calcShift(firstImageCorners, secondImageCorners)
-    disp(firstImageCorners);
-    disp(secondImageCorners);
     totalShift = 0;
     for i=1:length(firstImageCorners)-1
         totalShift = totalShift + calcDistance(firstImageCorners(i), secondImageCorners(i), firstImageCorners(i+4), secondImageCorners(i+4));
