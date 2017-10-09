@@ -92,7 +92,7 @@ function keypoints = get_misc_points(image, threshold)
 
     cc = bwconncomp(binaryImage); 
     stats = regionprops(cc, 'Area','Eccentricity', 'Centroid'); 
-    idx = find([stats.Area] > 80 & [stats.Eccentricity] < 0.8); 
+    idx = find([stats.Area] > 80 & [stats.Eccentricity] < 0.8);
     
     centroidPts = {};
     for i = idx

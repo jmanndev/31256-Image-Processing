@@ -1,7 +1,7 @@
 % Loads all the heat matrices into memory. The matrices are formatted as
 % 640x480 numbers which correspond to the intensity of the thermal images.
 
-matrixFiles = dir('./Dynamic Heat Matrices/*.txt');      
+matrixFiles = dir('./Dynamic Heat Matrices/*T0004*.txt');      
 nfiles = length(matrixFiles);  % Number of files found
 matrices = {nfiles};
 for ii=1:nfiles
