@@ -6,7 +6,7 @@
 
 function [images] = readFiles(option)
 
-patients = {'T0004', 'T0006', 'T0007', 'T0179'};
+patients = {'T0004', 'T0006', 'T0007'};
 
 if (strcmp(option, 'all')) 
     load = patients;

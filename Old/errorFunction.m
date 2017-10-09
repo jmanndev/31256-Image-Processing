@@ -1,3 +1,5 @@
+% Take some images and compare the average shift of keypoints from image to image
+% Currently only uses Harris corner detection
 function error = errorFunction(inputImages, initalMetric)
 
 noImages = length(inputImages);
@@ -38,6 +40,7 @@ function distance = calcDistance(x1, x2, y1, y2)
     distance = sqrt((x2-x1)^2+(y2-y1)^2);
 
 end
+
 
 %im1
 % get harris corners
