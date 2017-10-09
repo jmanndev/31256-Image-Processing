@@ -17,6 +17,4 @@ function [alignedImages] = main(dir)
     initial = errorFunction(dataset{1}, 1);
     disp(errorFunction(dataset{1}, initial));
     disp(errorFunction(alignedImages{1}, initial));
-    
-    stuff = 0;
 end
