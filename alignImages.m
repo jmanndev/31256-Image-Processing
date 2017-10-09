@@ -8,12 +8,13 @@ function [ final_align_batch ] = alignImages(images)
     
     for cell =  1:length(images)
         noImages = length(cell);
+        threshold = getThreshold(images{cell});
         align_batch = {noImages};
         align_batch{1} = makeGray(images{cell}{1});
         
         % For each image in the 'cell' call the alignment function
         for image = 2:length(images{cell})
-            align_batch{image} = translate_on_box_center(images{cell}{image - 1}, images{cell}{image});
+            align_batch{image} = translate_on_box_center(images{cell}{image - 1}, images{cell}{image}, threshold);
         end
         
         final_align_batch{cell} = align_batch;
@@ -21,7 +22,7 @@ function [ final_align_batch ] = alignImages(images)
 
 end
 
-function new_img = translate_on_box_center(im1,im2)
+function new_img = translate_on_box_center(im1,im2,threshold)
 % misc returned as List(Vector(x,y))
 % corners returned as List(Vector(x,y))
 
@@ -31,7 +32,6 @@ function new_img = translate_on_box_center(im1,im2)
     corners2 = get_center_box_corners(im2, ROI);
    
     % Blob Detection MSER
-    threshold = 100;
     misc1 = get_misc_points(im1, threshold);
     misc2 = get_misc_points(im2, threshold);
     
