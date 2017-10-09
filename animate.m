@@ -17,8 +17,14 @@ function test = animate( images , times2play, fps)
     
     % Creates the frame array for the animation movie
     for i = 1:length(images)
-        % Converts the images from a grayscale image format to rbg image
-        img = cat(3, images{i}, images{i}, images{i});
+        % Checks if the images is grayscale, if it is the image this converts 
+        % the images from a grayscale image format to rbg image
+        if (size(images{i}, 3) == 1)
+            img = cat(3, images{i}, images{i}, images{i});
+        else
+            img = images{i};
+        end
+        
         frames(i) = im2frame(img);
     end
     
