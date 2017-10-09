@@ -1,14 +1,15 @@
 % Main file run this you dingo
 
-function [stuff] = main(dataset) 
+function [alignedImages] = main() 
     
-    % get images
-    images = readFiles('all');
+    % get images and matrices
+    dataset = readFiles('all');
     % align images according to method
-    alignedImages = align(images);
+    alignedImages = alignImages(dataset);
     % animate
-    animate(alignedImages, 1, 30);
+    % animate(alignedImages, 1, 30);
     % show error
+    % Calculate error based on the shift in images / compared to original
+    % dataset. 
     stuff = 0;
-
 end

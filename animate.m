@@ -1,17 +1,22 @@
-function [ animation ] = animate( images , times2play, fps)
+function test = animate( images , times2play, fps)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
-    if nargin < 2:
+    if (nargin < 2)
         times2play = 3;
         fps = 3;
-    elseif nargin < 3:
+    elseif (nargin < 3)
         fps = 3;
     end
     
-    for i = 1:length(images{1})
-        frames(i) = im2frame(images{1}{i});
+    frames = {};
+    for i = 1:length(images)
+%         rgbImage = cat(3, images{i}, images{i}, images{i});
+        map = uint8( 256 * gray(256) );
+        rgbImage = ind2rgb(images{i}, map);
+        frames{i} = im2frame(rgbImage);
     end
     
     movie(frames, times2play, fps);
+    test = true;
 end
 
