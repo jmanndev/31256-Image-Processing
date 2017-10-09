@@ -1,6 +1,10 @@
 function test = animate( images , times2play, fps)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%Function that given a cell wrapper of grayscale cell images animates them as a GIF image
+%   The GIF is repeated a times2play number of times, displaying fps
+%   imagess every second
+    
+    % If any of times2play or fps variable are not passed, this code
+    % initializes them
     if (nargin < 2)
         times2play = 3;
         fps = 3;
@@ -8,35 +12,18 @@ function test = animate( images , times2play, fps)
         fps = 3;
     end
     
+    % Extract the images from the cell
     images = images{1};
     
+    % Creates the frame array for the animation movie
     for i = 1:length(images)
+        % Converts the images from a grayscale image format to rbg image
         img = cat(3, images{i}, images{i}, images{i});
         frames(i) = im2frame(img);
     end
     
+    % Plays the animation
     movie(frames, times2play, fps);
+    
     test = true;
 end
-
-% function test = animate( images , times2play, fps)
-% %UNTITLED3 Summary of this function goes here
-% %   Detailed explanation goes here
-%     if (nargin < 2)
-%         times2play = 3;
-%         fps = 3;
-%     elseif (nargin < 3)
-%         fps = 3;
-%     end
-%     pics = images{1};
-%     for i = 1:length(pics)
-% %         map = uint8( 256 * gray(256) );
-% %         rgbImage = ind2rgb(images{i}, map);
-% %         frames(i) = im2frame(pics{i});
-%         img = pics{i};
-%         frames(i) = im2frame(img);
-%     end
-%     
-%     movie(frames, times2play, fps);
-%     test = true;
-% end
