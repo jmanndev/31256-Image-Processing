@@ -12,14 +12,14 @@ badDetectionsPerLevel = {30};
 for level = 1:length(thresholdLevels)
     badDetects = 0; % Bad detections find less than or more than 3 blobs
     for i = 1:length(images)
-        if (getMaskingPoints(images{i}, thresholdLevels(level)) ~= 3)
+        pts = getMaskingPoints(images{i}, thresholdLevels(level));
+        if (pts < 2 || pts > 3)
             badDetects = badDetects + 1;
         end
     end
     badDetectionsPerLevel{level} = badDetects;
 end
 [minEl, minInd] = min(cell2mat(badDetectionsPerLevel));
-% disp(['Minimum bad detections at ' num2str(thresholdLevels(minInd(1)))]);
 
 thresholdLevel = thresholdLevels(minInd(1));
 
@@ -37,8 +37,16 @@ function noKeypoints = getMaskingPoints(image, threshold)
     % Calculate the number of keys points
     cc = bwconncomp(binaryImage); 
     stats = regionprops(cc, 'Area','Eccentricity'); 
-    idx = find([stats.Area] > 40 & [stats.Eccentricity] < 0.8); 
+    % Find the circular areaola in as blobs in the image, usually has areas
+    % of < 150px
+    circleIndex = find([stats.Area] < 200 & [stats.Area] > 30 & [stats.Eccentricity] < 0.8); 
+    % Find the square in the image, this usually has an area of
+    % ~3000-4000px
+    squareIndex = find([stats.Area] > 2800 & [stats.Area] < 4000 & [stats.Eccentricity] < 0.8);
     
+    idx = [circleIndex, squareIndex];
+
+   
     noKeypoints = length(idx);
 end
 

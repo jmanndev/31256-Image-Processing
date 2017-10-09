@@ -16,7 +16,7 @@ function [originalImages, alignedImages, error] = main(dir)
 %   Calculate error based on the shift in images / compared to original
 %   dataset.
     initial = errorFunction(dataset{1}, 1);
-    disp(errorFunction(dataset{1}, initial));
-    error = errorFunction(alignedImages{1}, initial)
-    disp(error);
+%     disp(errorFunction(dataset{1}, initial));
+    error = errorFunction(alignedImages{1}, initial);
+%     disp(error);
 end

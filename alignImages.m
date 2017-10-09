@@ -41,12 +41,12 @@ function new_img = translate_on_box_center(im1,im2,threshold)
     
 %     disp(length(corners1));
 %     disp(length(corners2));
-    corner_diff = corners1 - corners2;
+    corner_diff = (corners1 - corners2);
     
     % Get x and y translation metrics
     % Only use misc points if found or have 1:1 ratio
     if (~isempty(misc1) && ~isempty(misc2) && length(misc1) == length(misc2))
-        misc_diff = cell2mat(misc1) - cell2mat(misc2);
+        misc_diff = (cell2mat(misc1) - cell2mat(misc2));
     
         x_translate = mean([corner_diff(1), misc_diff(1)]);
  
@@ -92,7 +92,14 @@ function keypoints = get_misc_points(image, threshold)
 
     cc = bwconncomp(binaryImage); 
     stats = regionprops(cc, 'Area','Eccentricity', 'Centroid'); 
-    idx = find([stats.Area] > 80 & [stats.Eccentricity] < 0.8);
+    % Find the circular areaola in as blobs in the image, usually has areas
+    % of < 150px
+    circleIndex = find([stats.Area] < 215 & [stats.Area] > 30 & [stats.Eccentricity] < 0.8); 
+    % Find the square in the image, this usually has an area of
+    % ~3000-4000px
+    squareIndex = find([stats.Area] > 2800 & [stats.Area] < 4000 & [stats.Eccentricity] < 0.8);
+    % Combine the two index arrays
+    idx = [circleIndex, squareIndex];
     
     centroidPts = {};
     for i = idx
