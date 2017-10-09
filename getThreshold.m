@@ -1,3 +1,6 @@
+% Function that selects the best threshold level for the image set given.
+% The best threshold is said to be the one that minimises bad blobs
+% detections.
 function thresholdLevel = getThreshold(images) 
 
 % Looking at histograms of the images we see that few pixels have values
@@ -22,25 +25,26 @@ thresholdLevel = thresholdLevels(minInd(1));
 
 end
 
+% Function that calculates the number of key points for image using
+% threshold as the value to clear or set a pixel when converting to a
+% binary image.
 function noKeypoints = getMaskingPoints(image, threshold)
-
+    % Convert into binary image
     image = makeGray(image);
     thresholdValue = threshold;
     binaryImage = image < thresholdValue;
-
+    
+    % Calculate the number of keys points
     cc = bwconncomp(binaryImage); 
     stats = regionprops(cc, 'Area','Eccentricity'); 
     idx = find([stats.Area] > 40 & [stats.Eccentricity] < 0.8); 
-%     BW2 = ismember(labelmatrix(cc), idx); 
-%     figure;
-%     imshowpair(image, BW2, 'montage');
     
     noKeypoints = length(idx);
 end
 
-function [grayImage] = makeGray(image)
 % Helper Function, 
-% If the image is not grayscale convert it
+% If the image is not grayscale convert it to grayscale
+function [grayImage] = makeGray(image)
     grayImage = image;
     if (size(image, 3) == 3) 
         grayImage = rgb2gray(image);
