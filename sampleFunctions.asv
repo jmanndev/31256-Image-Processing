@@ -1,0 +1,6 @@
+function sample_functions(images, 'code
+
+function masking_demo(images)
+    img = images{1};
+    imshow(img);
+end
