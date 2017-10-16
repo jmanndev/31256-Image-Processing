@@ -16,6 +16,12 @@ for level = 1:length(thresholdLevels)
         if (pts ~= 3)
             badDetects = badDetects + 1;
         end
+        if (pts == 2)
+            badDetects = badDetects + .3;
+        end
+        if (pts == 4)
+            badDetects = badDetects + 2;
+        end
     end
     badDetectionsPerLevel{level} = badDetects;
 end
@@ -40,10 +46,10 @@ function noKeypoints = getMaskingPoints(image, threshold)
     stats = regionprops(cc, 'Area','Eccentricity'); 
     % Find the circular areaola in as blobs in the image, usually has areas
     % of < 150px
-    circleIndex = find([stats.Area] < 215 & [stats.Area] > 30 & [stats.Eccentricity] < 0.8); 
+    circleIndex = find([stats.Area] < 200 & [stats.Area] > 30 & [stats.Eccentricity] < 0.9); 
     % Find the square in the image, this usually has an area of
     % ~3000-4000px
-    squareIndex = find([stats.Area] > 2800 & [stats.Area] < 4000 & [stats.Eccentricity] < 0.8);
+    squareIndex = find([stats.Area] > 2800 & [stats.Area] < 4000 & [stats.Eccentricity] < 0.9);
     % Combine the indexes
     idx = [circleIndex, squareIndex];
     noKeypoints = length(idx);
